@@ -17,8 +17,10 @@ class calculator{
 			return Integer.parseInt(numbers);
 		else  if(numbers.length()>1)
 		{
-			String s[]=numbers.split(",");
+			String regex=",|\n|_";
+			String s[]=numbers.split(regex);
 			for(int x=0;x<s.length;x++){
+				if(!s[x].equals(""))
 				sum=sum+Integer.parseInt(s[x]);
 			}
 		}
