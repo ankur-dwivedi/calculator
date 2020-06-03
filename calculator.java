@@ -1,15 +1,15 @@
 import java.io.*;
 class calculator{
-	public static void main(String args[])throws IOException{
+	public static void main(String args[])throws IOException,Exception{
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Enter a string value for number");
 		String numbers=br.readLine();
 		calculator ob=new calculator();
-		// System.out.println(ob.Add("//;\n1;2")); for testing uncomment this to write new line in cmd
+		// System.out.println(ob.Add("//;\n1;2;-1;-8;-9")); for testing uncomment this to write new line in cmd	
 		System.out.println(ob.Add(numbers));
 
 	}
-	int Add(String numbers)
+	int Add(String numbers)throws Exception
 	{
 		int sum=0;
 
@@ -19,6 +19,7 @@ class calculator{
 			return Integer.parseInt(numbers);
 		else  if(numbers.length()>1)
 		{
+
 			if(numbers.substring(0,2).equals("//"))
 			{		
 					String newline="\n";
@@ -27,8 +28,13 @@ class calculator{
 					String s[]=numbers.split(regex);
 
 					for(int x=0;x<s.length;x++){
-						if(!s[x].equals(""))
-						sum=sum+Integer.parseInt(s[x]);
+						if(!s[x].equals("")){
+							if(Integer.parseInt(s[x])<0){
+						        	negativeNumber(numbers,regex);
+							}
+							else
+							sum=sum+Integer.parseInt(s[x]);
+						}
 			
 					}	
 			}
@@ -36,13 +42,31 @@ class calculator{
 				String regex=",|\n|_";
 				String s[]=numbers.split(regex);
 				for(int x=0;x<s.length;x++){
-					if(!s[x].equals(""))
-					sum=sum+Integer.parseInt(s[x]);
+					if(!s[x].equals("")){
+						if(Integer.parseInt(s[x])<0){
+						        	negativeNumber(numbers,regex);
+								
+							}
+							else
+							sum=sum+Integer.parseInt(s[x]);
+				}
 				
 				}		
 			}
 		}
 		return sum;
 
+	}
+	void negativeNumber(String numbers,String regex)throws Exception{ 
+		String s[]=numbers.split(regex),negative="";
+		for(int x=0;x<s.length;x++){
+			if(!s[x].equals("")){
+				if(Integer.parseInt(s[x])<0)
+					negative=negative+" "+s[x];
+			}
+				
+		}	
+		Exception Negative=new  Exception("negatives not allowed "+negative.trim());
+		throw Negative;	
 	}
 }
