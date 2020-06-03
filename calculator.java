@@ -5,8 +5,9 @@ class calculator{
 		System.out.println("Enter a string value for number");
 		String numbers=br.readLine();
 		calculator ob=new calculator();
-		// System.out.println(ob.Add("//;\n1;2;-1;-8;-9")); for testing uncomment this to write new line in cmd	
-		System.out.println(ob.Add(numbers));
+		
+		  // System.out.println(ob.Add("//[;][@][##]\n1;2@10##5")); // for testing uncomment this to write new line in cmd	
+		 System.out.println(ob.Add(numbers));
 
 	}
 	int Add(String numbers)throws Exception
@@ -17,26 +18,34 @@ class calculator{
 			sum=0;
 		else if(numbers.length()==1)
 			return Integer.parseInt(numbers);
-		else  if(numbers.length()>1)
-		{
+		else  if(numbers.length()>1){
+			if(numbers.substring(0,2).equals("//")){		
 
-			if(numbers.substring(0,2).equals("//"))
-			{		
-					String newline="\n";
-					String regex=numbers.substring(2,numbers.indexOf(newline));
+				String newline="\n";
+				if(numbers.indexOf(newline)!=-1){
+					String regex="";
+					if(numbers.charAt(2)!='[')
+					regex=numbers.substring(2,numbers.indexOf(newline));
+					else
+					regex=findRegex(numbers.substring(2,numbers.indexOf(newline)));
+
 					numbers=numbers.substring(numbers.indexOf(newline)+1);
 					String s[]=numbers.split(regex);
-
 					for(int x=0;x<s.length;x++){
 						if(!s[x].equals("")){
 							if(Integer.parseInt(s[x])<0){
 						        	negativeNumber(numbers,regex);
 							}
-							else
-							sum=sum+Integer.parseInt(s[x]);
+							else{
+								if(Integer.parseInt(s[x])<=1000)
+								sum=sum+Integer.parseInt(s[x]);
+							}
 						}
 			
 					}	
+				}else{
+					System.out.println("Format icorrect new line(\\n) not found");
+				}
 			}
 			else{
 				String regex=",|\n|_";
@@ -47,8 +56,11 @@ class calculator{
 						        	negativeNumber(numbers,regex);
 								
 							}
-							else
-							sum=sum+Integer.parseInt(s[x]);
+							else{
+								if(Integer.parseInt(s[x])<=1000)
+								sum=sum+Integer.parseInt(s[x]);
+							}
+							
 				}
 				
 				}		
@@ -68,5 +80,19 @@ class calculator{
 		}	
 		Exception Negative=new  Exception("negatives not allowed "+negative.trim());
 		throw Negative;	
+	}
+	String findRegex(String numbers){
+		numbers=numbers.substring(1,numbers.length()-1);
+		for(int x=0;x<numbers.length();x++){
+			char c=numbers.charAt(x);
+			if(c==']'||c=='[')
+				numbers=numbers.substring(0,x)+"123"+numbers.substring(x+1);
+		}
+		String regex="",reg="123123";
+		String s[]=numbers.split(reg);
+		for(int x=0;x<s.length;x++){
+				regex=regex+"|"+s[x];
+		}	
+		return regex.substring(1);
 	}
 }
